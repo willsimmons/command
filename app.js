@@ -1,11 +1,13 @@
 $(document).ready(function() {
   
 Physics(function(world){
-  var viewWidth = 900;
+  var viewWidth = 850;
   var viewHeight = 500;
 
   var scratch; //will be used for mouse movement tracking
   var newAngle; //the point that we are aiming at
+  var mousePos; //where the mouse is located
+ 
 
   var renderer = Physics.renderer('canvas', {
     el: 'board',
@@ -50,19 +52,19 @@ Physics(function(world){
       cof: 0
   }));
 
-  // // add a "ball"   use this for bullet generation and missile
-  // var ball = Physics.body('circle', {
-  //   x: 250, // x-coordinate
-  //   y: 480, // y-coordinate
-  //   radius: 10
-  // });
+  // add a "bullet at the turret location when shot-fired" 
+  var bullet = Physics.body('circle', {
+    x: 450, // x-coordinate 
+    y: 440, // y-coordinate
+    radius: 10
+  });
 
   // world.add(ball);
 
   // add the turretBase
   var turretBase = Physics.body('rectangle', {
     x: 450,
-    y: 485,
+    y: 480,
     width: 50,
     height: 30,
     treatment: 'static'
@@ -73,21 +75,78 @@ Physics(function(world){
     y: 440,
     width:25,
     height:10,
-    treatment: 'dynamic'
+    treatment: 'static'
+  });
+  
+  //four cities to defend
+  var cityA = Physics.body('rectangle', {
+    x: 100,
+    y: 455,
+    width:80,
+    height:40,
+    treatment: 'static'
+  });
+  
+  var cityB = Physics.body('rectangle', {
+    x: 265,
+    y: 455,
+    width: 80,
+    height:40,
+    treatment: 'static'
+  });
+  
+  var cityC = Physics.body('rectangle', {
+    x: 635,
+    y: 455,
+    width:80,
+    height:40,
+    treatment: 'static'
+  });
+  
+  var cityD = Physics.body('rectangle', {
+    x: 800,
+    y: 455,
+    width:80,
+    height:40,
+    treatment: 'static'
   });
 
+  // //city constructor ask for help if we get to this on thursday
+  // var City = function(x){
+  //   self=this;
+  //   this.type="rectangle";
+  //   this.x=x;
+  //   this.y=300;
+  //   this.width=300;
+  //   this.height=150;
+  //   this.treatment="static";
+  //   Physics.body(self.type,self.x,self.y,self.width,self.height,self.treatment);
+  // };
+  
+  // var cityA= new City(200);
+  // var cityB= new City(400);
+  // var cityC= new City(600);
+  // var cityD= new City(800);
+    
+
+
+  //add objects to the world
   world.add(turretBase);
   world.add(cannon);
+  world.add(cityA);
+  world.add(cityB);
+  world.add(cityC);
+  world.add(cityD);
   // ensure objects bounce when edge collision is detected
-  //need to edit this so that objects are destroyed when collision is detected?
-  world.add( Physics.behavior('body-impulse-response') );
+  //need to edit this so that objects are destroyed when collision is detected -TO DO
+  world.add(Physics.behavior('body-impulse-response') );
 
   world.add(Physics.behavior('body-collision-detection'));
 
   world.add(Physics.behavior('sweep-prune') );
 
-  // add some gravity
-  // world.add( Physics.behavior('constant-acceleration') );
+  // add some gravity -TO DO (YES OR NO)
+  world.add( Physics.behavior('constant-acceleration') );
 
   // subscribe to ticker to advance the simulation
   Physics.util.ticker.on(function( time, dt ){
@@ -95,45 +154,38 @@ Physics(function(world){
   });
 
 
-//targeting functionality for mouse mousemovement
+    //targeting functionality for mouse movement
   
     document.getElementById("board").onmousemove = function(event){
     scratch = Physics.scratchpad();  //have to use this or it "blows up"
     mousePos = scratch.vector().set(event.pageX, event.pageY); //where are we pointing now
-    scratch.done();   ///work out the math
-    mousePos.vsub(cannon.state.pos); //calulate the
-    newAngle = mousePos.angle(); // get angle with respect to x axis
-    cannon.state.angular.pos = newAngle;
-    
-};
+    scratch.done(); //throw out the scratchpaper
+    mousePos.vsub(cannon.state.pos); //calulate the diff
+    newAngle = mousePos.angle(); // get new angle with respect to x axis
+    cannon.state.angular.pos = newAngle; //set to new angle
+    };
 
-  // //listener to aim turret and to fire turret spaghetti than refine
-  // window.addEventListener('mousemove', function(event) {
-  //   console.log(event);
-  //   // if (event.keyCode === 13) {
-  //   //   world.emit('start-ball');
-  //   // } else if (event.keyCode === 37) {
-  //   //   world.emit('move', 'left');
-  //   // } else if (event.keyCode == 39) {
-  //   //   world.emit('move', 'right');
-  //   // }
-  // });
+    //listener to fire bullet on click
+    document.getElementById('board').onclick = function(event) {
+    console.log(event);
+    world.emit('shot-fired');
+    };
 
   // start the ticker
   Physics.util.ticker.start();
 
-  //set a one function to fire when mouse clicked, generate a bullet ob at that angle...
-  world.one('start-ball', function(data, e) {
-    ball.state.vel.set(0.33,-0.33);
-    ball.sleep(false);
+  //set the function create a bullet on click aimed at where the turret is targeting
+  //how to fire -TO DO
+  world.on('shot-fired', function(data, e) {
+    world.add(bullet);
+    bullet.state.angle.pos = newAngle; //aiming at the same angle as the turret
+    bullet.state.vel.set(0.33,-0.33);  //need to figure out how to shoot
+    bullet.sleep(false);
   });
 
-   //move turret cannon, see if we can find out where the mouse is at this point?
-  world.on('move', function(data, e) {
-    turretTop.state.pos.set(platform.state.pos.x + (data === 'left' ? -20 : 20), platform.state.pos.y);
-  });
+  
 
-    //figure out how to delete missles when connected, how to delete cities on connect
+  //figure out how to delete missles when connected, how to delete cities on connect
 
   world.on('collisions:detected', function(data, e) {
     console.log(data);
