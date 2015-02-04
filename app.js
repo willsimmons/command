@@ -9,51 +9,13 @@ Physics(function(world){
   var newAngle; //the point that we are aiming at
   var mousePos; //where the mouse is located
   var cityCount=4; //amount of lives/cities to defend, when 0, game over
+  
+  //world objects
 
-  var renderer = Physics.renderer('canvas', {
-    el: 'board',
-    width: viewWidth,
-    height: viewHeight,
-    meta: false, // don't display meta data
-    styles: {
-        // set colors for the cities, bullets, missles, and turret
-        //FIGURE OUT HOW TO USE,
-        // 'enemy' : {
-        //     strokeStyle: '#351024',
-        //     lineWidth: 1,
-        //     fillStyle: 'black',
-        //     angleIndicator: '#351024'   //WHAT IS THIS PARAMETER
-        // },
-        // 'cities' : {     //large rectangles in the foreground
-        //   fillStyle: '#ccc'
-        // },
-        // 'bullets' : {     //small squares
-        //   fillStyle: '#ccc'
-        // },
-        // 'turret' : {     //small squares
-        //   fillStyle: '#ccc'
-        // }
-    }
-  });
-
-  // add the renderer
-  world.add( renderer );
-  // render on each step
-  world.on('step', function(){
-    world.render();
-  });
-
-  // bounds of the window
-  var viewportBounds = Physics.aabb(0, 0, viewWidth, viewHeight);
-
-  // // constrain objects to these bounds
-  // world.add(Physics.behavior('edge-collision-detection', {
-  //     aabb: viewportBounds,
-  //     restitution: 1,
-  //     cof: 0
-  // }));
-
-  // add the turret components
+  var bullet; //will be created on mouseclicks
+  var enemy; //created by mouse generator starting every 3 secs
+  
+  // turret components
   var turretBase = Physics.body('rectangle', {
     x: 450,
     y: 480,
@@ -102,27 +64,43 @@ Physics(function(world){
     height:40,
     treatment: 'static'
   });
-  
-  var bullet; //will be created on mouseclicks
-  var enemy; //created by mouse generator starting every 3 secs
 
-   //enemy constructor function
-  // //city constructor ask for help if we get to this on thursday
-  // var City = function(x){
-  //   self=this;
-  //   this.type="rectangle";
-  //   this.x=x;
-  //   this.y=300;
-  //   this.width=300;
-  //   this.height=150;
-  //   this.treatment="static";
-  //   Physics.body(self.type,self.x,self.y,self.width,self.height,self.treatment);
-  // };
-  
-  // var cityA= new City(200);
-  // var cityB= new City(400);
-  // var cityC= new City(600);
-  // var cityD= new City(800);
+  //renderer
+  var renderer = Physics.renderer('canvas', {
+    el: 'board',
+    width: viewWidth,
+    height: viewHeight,
+    meta: false, // don't display meta data
+    styles: {
+        // set colors for the cities, bullets, missles, and turret
+        //FIGURE OUT HOW TO USE,
+        // 'enemy' : {
+        //     strokeStyle: '#351024',
+        //     lineWidth: 1,
+        //     fillStyle: 'black',
+        //     angleIndicator: '#351024'   //WHAT IS THIS PARAMETER
+        // },
+        // 'cities' : {     //large rectangles in the foreground
+        //   fillStyle: '#ccc'
+        // },
+        // 'bullets' : {     //small squares
+        //   fillStyle: '#ccc'
+        // },
+        // 'turret' : {     //small squares
+        //   fillStyle: '#ccc'
+        // }
+    }
+  });
+
+  // add the renderer
+  world.add( renderer );
+  // render on each step
+  world.on('step', function(){
+    world.render();
+  });
+
+  // bounds of the window
+  var viewportBounds = Physics.aabb(0, 0, viewWidth, viewHeight);
 
   //add objects to the world
   world.add(turretBase);
@@ -168,6 +146,8 @@ Physics(function(world){
   // start the ticker
   Physics.util.ticker.start();
 
+  
+  //enemy generator
   var factory=window.setInterval( function(){
       enemy = Physics.body('convex-polygon', {
         x: Math.floor(Math.random()*900), //randomly generated enemy on x axis
@@ -190,10 +170,6 @@ Physics(function(world){
     }
   },2000);
   
- 
-
-
-
   //create a bullet onclick to fire where turret is aimed
   world.on('shot-fired', function(data, event) {
    //where are we aiming
@@ -214,6 +190,8 @@ Physics(function(world){
     bullet.sleep(false);
   });
 
+  
+  //collision handling for cities, bullets, and enemies
   world.on('collisions:detected', function(data, event) {  
     //no bullets hitting cities
     if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===cityA) ||
@@ -282,7 +260,7 @@ Physics(function(world){
      if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cannon) || 
         (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cannon)){
         world.removeBody(enemy);
-    }     
+    }
   });
 
 
