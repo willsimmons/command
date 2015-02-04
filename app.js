@@ -52,15 +52,6 @@ Physics(function(world){
       cof: 0
   }));
 
-  // add a "bullet at the turret location when shot-fired" 
-  var bullet = Physics.body('circle', {
-    x: 450, // x-coordinate 
-    y: 440, // y-coordinate
-    radius: 10
-  });
-
-  // world.add(ball);
-
   // add the turretBase
   var turretBase = Physics.body('rectangle', {
     x: 450,
@@ -145,8 +136,8 @@ Physics(function(world){
 
   world.add(Physics.behavior('sweep-prune') );
 
-  // add some gravity -TO DO (YES OR NO)
-  world.add( Physics.behavior('constant-acceleration') );
+  // // add some gravity -TO DO (YES OR NO)
+  // world.add( Physics.behavior('constant-acceleration') );
 
   // subscribe to ticker to advance the simulation
   Physics.util.ticker.on(function( time, dt ){
@@ -167,7 +158,6 @@ Physics(function(world){
 
     //listener to fire bullet on click
     document.getElementById('board').onclick = function(event) {
-    console.log(event);
     world.emit('shot-fired');
     };
 
@@ -176,12 +166,25 @@ Physics(function(world){
 
   //set the function create a bullet on click aimed at where the turret is targeting
   //how to fire -TO DO
-  world.on('shot-fired', function(data, e) {
-    world.add(bullet);
-    bullet.state.angle.pos = newAngle; //aiming at the same angle as the turret
-    bullet.state.vel.set(0.33,-0.33);  //need to figure out how to shoot
+  world.on('shot-fired', function(data, event) {
+   //where are we aiming
+   var angle =newAngle; //from where we are aiming
+   //where do we want to shoot, will need this for our bullets
+   var cos = Math.cos( angle );
+   var sin = Math.sin( angle );
+   // add a "bullet at the turret location when shot-fired" 
+   var bullet = Physics.body('circle', {
+      x: 450, // x-coordinate set at turret 
+      y: 440, // y-coordinate set at turret
+      radius: 5,
+      treatment:'dynamic',    
+      vx: cos, //cosine for x coordinate acceleration
+      vy: sin,//sine for y coordinate acceleration
+      });
+    world.add(bullet);   
     bullet.sleep(false);
   });
+
 
   
 
