@@ -9,7 +9,6 @@ Physics(function(world){
   var newAngle; //the point that we are aiming at
   var mousePos; //where the mouse is located
   var cityCount=4; //amount of lives/cities to defend, when 0, game over
-  
 
   var renderer = Physics.renderer('canvas', {
     el: 'board',
@@ -169,7 +168,7 @@ Physics(function(world){
   // start the ticker
   Physics.util.ticker.start();
 
-  window.setInterval( function(){
+  var factory=window.setInterval( function(){
       enemy = Physics.body('convex-polygon', {
         x: Math.floor(Math.random()*900), //randomly generated enemy on x axis
         y: 100,
@@ -182,8 +181,18 @@ Physics(function(world){
             { x: 15, y: -4 }
             ] 
         });
-    world.add(enemy);
+    if(cityCount!==0){
+      world.add(enemy);
+    }
+    else {
+      alert("Game Over");
+      clearInterval(factory);
+    }
   },2000);
+  
+ 
+
+
 
   //create a bullet onclick to fire where turret is aimed
   world.on('shot-fired', function(data, event) {
@@ -270,12 +279,12 @@ Physics(function(world){
         cityCount--;
     }
         //strange events aka, enemy hitting turret 
-     if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===turret) || 
-        (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===turret)){
+     if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cannon) || 
+        (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cannon)){
         world.removeBody(enemy);
-    }   
-    
+    }     
   });
-  
+
+
  });
 });
