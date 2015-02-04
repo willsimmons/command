@@ -9,7 +9,7 @@ Physics(function(world){
   var newAngle; //the point that we are aiming at
   var mousePos; //where the mouse is located
   var cityCount=4; //amount of lives/cities to defend, when 0, game over
-  //will use in enemy generator 
+  
 
   var renderer = Physics.renderer('canvas', {
     el: 'board',
@@ -105,6 +105,7 @@ Physics(function(world){
   });
   
   var bullet; //will be created on mouseclicks
+  var enemy; //created by mouse generator starting every 3 secs
 
    //enemy constructor function
   // //city constructor ask for help if we get to this on thursday
@@ -167,20 +168,22 @@ Physics(function(world){
 
   // start the ticker
   Physics.util.ticker.start();
-  
-    var enemy = Physics.body('convex-polygon', {
-      x: Math.floor(Math.random()*900), //randomly generated enemy on x axis
-      y: 100,
-      // the centroid is automatically calculated and used to position the shape
-      vertices: [
-          { x: 0, y: -15 },
-          { x: -15, y: -4 },
-          { x: -9, y: 12 },
-          { x: 9, y: 12 },
-          { x: 15, y: -4 }
-          ] 
-     });
+
+  window.setInterval( function(){
+      enemy = Physics.body('convex-polygon', {
+        x: Math.floor(Math.random()*900), //randomly generated enemy on x axis
+        y: 100,
+        // the centroid is automatically calculated and used to position the shape
+        vertices: [
+            { x: 0, y: -15 },
+            { x: -15, y: -4 },
+            { x: -9, y: 12 },
+            { x: 9, y: 12 },
+            { x: 15, y: -4 }
+            ] 
+        });
     world.add(enemy);
+  },2000);
 
   //create a bullet onclick to fire where turret is aimed
   world.on('shot-fired', function(data, event) {
@@ -265,13 +268,14 @@ Physics(function(world){
         world.removeBody(enemy);
         world.removeBody(cityD);
         cityCount--;
-    }    
+    }
+        //strange events aka, enemy hitting turret 
+     if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===turret) || 
+        (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===turret)){
+        world.removeBody(enemy);
+    }   
+    
   });
-   
-    //game over 
-     if(cityCount===0){
-      world.destroy();
-      alert("Game Over");
-     }
-  });
+  
+ });
 });
