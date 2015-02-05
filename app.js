@@ -10,8 +10,6 @@ Physics(function(world){
   var mousePos; //where the mouse is located
   var cityCount=4; //amount of lives/cities to defend, when 0, game over
   
-  //world objects
-
   var bullet; //will be created on mouseclicks
   var enemy; //created by mouse generator starting every 3 secs
   var currentScore=0; //player score
@@ -32,6 +30,23 @@ Physics(function(world){
     height:10,
     treatment: 'static'
   });
+  //city builder function DOES NOT WORK
+ 
+  // function cityBuilder(name,location) {
+      
+  //     var place = Physics.body('rectangle',{
+  //     x: location,
+  //     y: 475,
+  //     width:80,
+  //     height:40,
+  //     treatment: 'static'
+  //     });
+  // }
+
+  // cityA=cityBuilder(cityA,100);
+  // cityB=cityBuilder(cityB,265);
+  // cityC=cityBuilder(cityC,635);
+  // cityD=cityBuilder(cityD,800);
   
   //four cities to defend
 
@@ -82,6 +97,9 @@ Physics(function(world){
         },
         'rectangle' : {     //cities and turret
           fillStyle: '#0000FF'
+        },
+        'city':{
+          fillStyle: 'pink'
         }
     }
   });
@@ -201,7 +219,7 @@ Physics(function(world){
   });
   
 
-  //collision queries
+  //collision queries DO NOT WORK
   //if bullet hits city
   // var bulletHitCity=Physics.query({
   //   labels:{$in:['circle', 'rectangle']}
@@ -257,8 +275,9 @@ Physics(function(world){
         (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
         deletion(bullet,enemy);
         scoring(currentScore);
-    }    
-    //enemy hitting a city
+    }  
+
+    // enemy hitting a city
     if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cityA) ||
         (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cityA)){
         deletion(enemy,cityA);
@@ -284,6 +303,7 @@ Physics(function(world){
         (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cannon)){
         deletion(enemy);
     }
+
      if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===turretBase) || 
         (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===turretBase)){
         deletion(enemy);

@@ -3,8 +3,8 @@ To-Do
 	-city pictures (8 bit graphical representation
 2. Add subtype of city based on rectangle
 3. Collision Detection by Query method /adjust scoring
-6. Cleaner Game Over Function
-7. Deploy
+4. Cleaner Game Over Function
+5. Deploy
 
 WishList (after deployment)
 1. Increasing Difficulty (faster gravity, adjust frequency of enemy generator)
