@@ -73,23 +73,15 @@ Physics(function(world){
     height: viewHeight,
     meta: false, // don't display meta data
     styles: {
-        // set colors for the cities, bullets, missles, and turret
-        //FIGURE OUT HOW TO USE,
-        // 'enemy' : {
-        //     strokeStyle: '#351024',
-        //     lineWidth: 1,
-        //     fillStyle: 'black',
-        //     angleIndicator: '#351024'   //WHAT IS THIS PARAMETER
-        // },
-        // 'cities' : {     //large rectangles in the foreground
-        //   fillStyle: '#ccc'
-        // },
-        // 'bullets' : {     //small squares
-        //   fillStyle: '#ccc'
-        // },
-        // 'turret' : {     //small squares
-        //   fillStyle: '#ccc'
-        // }
+        'convex-polygon' : {   //enemies
+          fillStyle: '#26F51B'
+        },
+        'circle' : {     //bullets
+          fillStyle: '#F70A0A'
+        },
+        'rectangle' : {     //cities and turret
+          fillStyle: '#0000FF'
+        }
     }
   });
 
@@ -110,6 +102,13 @@ Physics(function(world){
   world.add(cityB);
   world.add(cityC);
   world.add(cityD);
+
+  // // keeps everything in boxes -can't use this...
+  // world.add(Physics.behavior('edge-collision-detection', {
+  //     aabb: viewportBounds,
+  //     restitution: -1,
+  //     cof: 0
+  // }));
   
   // ensure objects bounce when edge collision is detected
   //need to edit this so that objects are destroyed when collision is detected -TO DO
@@ -182,7 +181,7 @@ Physics(function(world){
    bullet = Physics.body('circle', {
       x: 450, // x-coordinate set at turret 
       y: 430, // y-coordinate set at turret
-      radius: 5,
+      radius: 10,
       treatment:'dynamic',    
       vx: cos, //cosine for x coordinate acceleration
       vy: sin//sine for y coordinate acceleration
@@ -268,7 +267,7 @@ Physics(function(world){
      if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===turretBase) || 
         (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===turretBase)){
         world.removeBody(enemy);
-    }
+    } 
 
   });
 
