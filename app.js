@@ -14,7 +14,8 @@ Physics(function(world){
 
   var bullet; //will be created on mouseclicks
   var enemy; //created by mouse generator starting every 3 secs
-  
+  var score=0; //player score
+
   // turret components
   var turretBase = Physics.body('rectangle', {
     x: 450,
@@ -119,7 +120,7 @@ Physics(function(world){
   world.add(Physics.behavior('sweep-prune') );
 
   // gravity (useful for enemy generation need to slow this down)
-  world.add( Physics.behavior('constant-acceleration') );
+  world.add(Physics.behavior('constant-acceleration') );
 
   // subscribe to ticker to advance the simulation
   Physics.util.ticker.on(function( time, dt ){
@@ -150,7 +151,7 @@ Physics(function(world){
   //enemy generator
   var factory=window.setInterval( function(){
       enemy = Physics.body('convex-polygon', {
-        x: Math.floor(Math.random()*900), //randomly generated enemy on x axis
+        x: Math.floor(Math.random() * (880 - 20)) + 20, //randomly generated enemy on x axis
         y: 100,
         // the centroid is automatically calculated and used to position the shape
         vertices: [
@@ -220,16 +221,19 @@ Physics(function(world){
         (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
         world.removeBody(bullet);
         world.removeBody(enemy);
+        score+=200;
     }
     if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) || 
         (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
         world.removeBody(bullet);
         world.removeBody(enemy);
+        score+=200;
     }
     if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) || 
         (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
         world.removeBody(bullet);
         world.removeBody(enemy);
+        score+=200;
     }    
     //enemy hitting a city
     if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cityA) ||
@@ -261,6 +265,11 @@ Physics(function(world){
         (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cannon)){
         world.removeBody(enemy);
     }
+     if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===turretBase) || 
+        (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===turretBase)){
+        world.removeBody(enemy);
+    }
+
   });
 
 
