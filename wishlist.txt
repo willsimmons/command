@@ -2,7 +2,6 @@ To-Do
 1. Scorekeeping Function JavaScript
 2. Missle command arcade cabinet look HTML/CSS
 3. Add subtype of city based on rectangle
-4. Slow down gravity to 2/3rds speed
 5. Collision Detection by Query method
 6. Enemy Kill Function
 7. City Kill Function
@@ -10,7 +9,7 @@ To-Do
 9. Deploy
 
 WishList (after deployment)
-1. Increasing Difficulty
+1. Increasing Difficulty (faster gravity, adjust frequency of enemy generator)
 2. High Score Table
 3. Extra Life Component
 4. Start Screen w/ High Score Tableview

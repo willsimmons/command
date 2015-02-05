@@ -36,7 +36,7 @@ Physics(function(world){
   //four cities to defend
   var cityA = Physics.body('rectangle', {
     x: 100,
-    y: 455,
+    y: 475,
     width:80,
     height:40,
     treatment: 'static'
@@ -44,7 +44,7 @@ Physics(function(world){
   
   var cityB = Physics.body('rectangle', {
     x: 265,
-    y: 455,
+    y: 475,
     width: 80,
     height:40,
     treatment: 'static'
@@ -52,7 +52,7 @@ Physics(function(world){
   
   var cityC = Physics.body('rectangle', {
     x: 635,
-    y: 455,
+    y: 475,
     width:80,
     height:40,
     treatment: 'static'
@@ -60,7 +60,7 @@ Physics(function(world){
   
   var cityD = Physics.body('rectangle', {
     x: 800,
-    y: 455,
+    y: 475,
     width:80,
     height:40,
     treatment: 'static'
@@ -119,7 +119,11 @@ Physics(function(world){
   world.add(Physics.behavior('sweep-prune') );
 
   // gravity (useful for enemy generation need to slow this down)
-  world.add(Physics.behavior('constant-acceleration') );
+  var halfGravity = Physics.behavior('constant-acceleration', {
+    acc: { x : 0, y: 0.0003 } // reduced from default of .0004
+    });
+  
+  world.add(halfGravity);
 
   // subscribe to ticker to advance the simulation
   Physics.util.ticker.on(function( time, dt ){
