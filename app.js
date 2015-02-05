@@ -34,6 +34,7 @@ Physics(function(world){
   });
   
   //four cities to defend
+
   var cityA = Physics.body('rectangle', {
     x: 100,
     y: 475,
@@ -167,9 +168,16 @@ Physics(function(world){
     }
   },2000);
   
+  //scorekeeping function
   function scoring(){
       currentScore+=25; //increases score by 100 per enemy kill, needs to fix city issue
       document.getElementById('score').innerHTML="Score: " + currentScore;
+  }
+  
+  //deletion function
+  function deletion(itemA,itemB){
+    world.remove(itemA);
+    world.remove(itemB);
   }
 
   //create a bullet onclick to fire where turret is aimed
@@ -191,87 +199,96 @@ Physics(function(world){
     world.add(bullet);   
     bullet.sleep(false);
   });
+  
 
+  //collision queries
+  //if bullet hits city
+  // var bulletHitCity=Physics.query({
+  //   labels:{$in:['circle', 'rectangle']}
+  // });
+  
+  // //if bullet hits enemy
+  // var bulletHitEnemy=Physics.query({
+  //   labels:{$in:['circle', 'convex-polygon']}
+  // });
+
+  // //if enemy hits city
+  // var enemyHitCity=Physics.query({
+  //   labels:{$in:['convex-polygon', 'rectangle']}
+  // });
   
   //collision handling for cities, bullets, and enemies
-  world.on('collisions:detected', function(data, event) {  
-    //no bullets hitting cities
+  world.on('collisions:detected', function(data, event) { 
+
+   // no bullets hitting cities
     if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===cityA) ||
         (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===cityA)){
-        world.removeBody(bullet);
+        deletion(bullet);
     }
     if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===cityB) || 
         (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===cityB)){
-       world.removeBody(bullet);
+        deletion(bullet);
     }
     if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===cityC) || 
         (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===cityC)){
-       world.removeBody(bullet);
+        deletion(bullet);
     }
     if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===cityD) || 
         (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===cityD)){
-       world.removeBody(bullet);
+        deletion(bullet);
     }   
     //bullets killing enemies
     if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) ||
         (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
-        world.removeBody(bullet);
-        world.removeBody(enemy);
+        deletion(bullet,enemy);
         scoring(currentScore);
     }
     if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) || 
         (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
-        world.removeBody(bullet);
-        world.removeBody(enemy);
+        deletion(bullet,enemy);
         scoring(currentScore);
     }
     if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) || 
         (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
-        world.removeBody(bullet);
-        world.removeBody(enemy);
+        deletion(bullet,enemy);
         scoring(currentScore);
     }
     if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) || 
         (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
-        world.removeBody(bullet);
-        world.removeBody(enemy);
+        deletion(bullet,enemy);
         scoring(currentScore);
     }    
     //enemy hitting a city
     if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cityA) ||
         (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cityA)){
-        world.removeBody(enemy);
-        world.removeBody(cityA);
+        deletion(enemy,cityA);
         cityCount--;
     }
     if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cityB) || 
         (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cityB)){
-        world.removeBody(enemy);
-        world.removeBody(cityB);
+        deletion(enemy,cityB);
         cityCount--;
     }
     if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cityC) || 
         (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cityC)){
-        world.removeBody(enemy);
-        world.removeBody(cityC);
+        deletion(enemy,cityC);
         cityCount--;
     }
     if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cityD) || 
         (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cityD)){
-        world.removeBody(enemy);
-        world.removeBody(cityD);
+        deletion(enemy,cityD);
         cityCount--;
     }
         //strange events aka, enemy hitting turret 
      if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cannon) || 
         (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cannon)){
-        world.removeBody(enemy);
+        deletion(enemy);
     }
      if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===turretBase) || 
         (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===turretBase)){
-        world.removeBody(enemy);
+        deletion(enemy);
     } 
-
+     
   });
 
 
