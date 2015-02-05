@@ -3,7 +3,7 @@ $(document).ready(function() {
 Physics(function(world){
   var viewWidth = 900;
   var viewHeight = 500;
-  
+   
   //variables used in functions below
   var scratch; //will be used for mouse movement tracking
   var newAngle; //the point that we are aiming at
@@ -14,7 +14,7 @@ Physics(function(world){
 
   var bullet; //will be created on mouseclicks
   var enemy; //created by mouse generator starting every 3 secs
-  var score=0; //player score
+  var currentScore=0; //player score
 
   // turret components
   var turretBase = Physics.body('rectangle', {
@@ -102,13 +102,6 @@ Physics(function(world){
   world.add(cityB);
   world.add(cityC);
   world.add(cityD);
-
-  // // keeps everything in boxes -can't use this...
-  // world.add(Physics.behavior('edge-collision-detection', {
-  //     aabb: viewportBounds,
-  //     restitution: -1,
-  //     cof: 0
-  // }));
   
   // ensure objects bounce when edge collision is detected
   //need to edit this so that objects are destroyed when collision is detected -TO DO
@@ -122,7 +115,7 @@ Physics(function(world){
   var halfGravity = Physics.behavior('constant-acceleration', {
     acc: { x : 0, y: 0.0003 } // reduced from default of .0004
     });
-  
+
   world.add(halfGravity);
 
   // subscribe to ticker to advance the simulation
@@ -174,6 +167,11 @@ Physics(function(world){
     }
   },2000);
   
+  function scoring(){
+      currentScore+=25; //increases score by 100 per enemy kill, needs to fix city issue
+      document.getElementById('score').innerHTML="Score: " + currentScore;
+  }
+
   //create a bullet onclick to fire where turret is aimed
   world.on('shot-fired', function(data, event) {
    //where are we aiming
@@ -219,24 +217,25 @@ Physics(function(world){
         (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
         world.removeBody(bullet);
         world.removeBody(enemy);
+        scoring(currentScore);
     }
     if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) || 
         (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
         world.removeBody(bullet);
         world.removeBody(enemy);
-        score+=200;
+        scoring(currentScore);
     }
     if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) || 
         (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
         world.removeBody(bullet);
         world.removeBody(enemy);
-        score+=200;
+        scoring(currentScore);
     }
     if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) || 
         (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
         world.removeBody(bullet);
         world.removeBody(enemy);
-        score+=200;
+        scoring(currentScore);
     }    
     //enemy hitting a city
     if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cityA) ||
