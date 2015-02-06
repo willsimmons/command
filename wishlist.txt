@@ -1,13 +1,10 @@
 To-Do
-1. Missle command arcade cabinet look HTML/CSS 
-	-city pictures (8 bit graphical representation
-2. Add subtype of city based on rectangle
-3. Collision Detection by Query method /adjust scoring
-4. Cleaner Game Over Function
-5. Deploy
+1.Use query instead of if statements at collision detection
+2.Use city generator
+3.Deploy
 
 WishList (after deployment)
-1. Increasing Difficulty (faster gravity, adjust frequency of enemy generator)
+1. Increasing Difficulty after certain time period (faster gravity, adjust frequency of enemy generator)
 2. High Score Table
 3. Extra Life Component
 4. Start Screen w/ High Score Tableview
@@ -18,3 +15,4 @@ WishList (after deployment)
 9. Smart Targeting by enemy 
 10. Slow Exploding Bullets
 11. Enemy "Trails"
+12. Look like an old ATARI Cabinet
