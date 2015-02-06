@@ -9,7 +9,7 @@ function Player(person,score){
  if(localStorage.getItem("lastPlayer")!==null){
     var compressed=localStorage.getItem("lastPlayer");
     var onTheBoard=JSON.parse(compressed);
-    document.getElementById("last_player").innerHTML="Last Player:"+onTheBoard.person+"<br>Last Score:"+onTheBoard.score;
+    $("#last_player").html("Last Player:"+onTheBoard.person+"<br>Last Score:"+onTheBoard.score);
  }
 
 Physics(function(world){
@@ -152,19 +152,19 @@ Physics(function(world){
   });
 
   //targeting functionality for mouse movement
-  document.getElementById("board").onmousemove = function(event){
+  $("#board").mousemove(function(event){
     scratch = Physics.scratchpad();  //have to use this or it "blows up"
     mousePos = scratch.vector().set(event.pageX, event.pageY); //where are we pointing now
     scratch.done(); //throw out the scratchpaper
     mousePos.vsub(cannon.state.pos); //calulate the diff
     newAngle = mousePos.angle(); // get new angle with respect to x axis
     cannon.state.angular.pos = newAngle; //set to new angle
-    };
+    });
 
   //listener to fire bullet on click
-  document.getElementById('board').onclick = function(event) {
+  $('#board').click(function(event) {
     world.emit('shot-fired');
-    };
+    });
 
   // start the ticker
   Physics.util.ticker.start();
@@ -194,7 +194,7 @@ Physics(function(world){
   //scorekeeping function
   function scoring(){
       currentScore+=25; //increases score by 100 per enemy kill, but, that's because of the ifstatement problem
-      document.getElementById("score").innerHTML="Score: " + currentScore;
+      $("#score").innerHTML="Score: " + currentScore;
   }
   
   //deletion function for collision detection
