@@ -1,5 +1,17 @@
 $(document).ready(function() {
-  
+
+//player object, will be used when saving to local storage
+function Player(person,score){
+  this.person=person;
+  this.score=score;
+}
+//show us the last player...if they exist
+ if(localStorage.getItem("lastPlayer")!==null){
+    var compressed=localStorage.getItem("lastPlayer");
+    var onTheBoard=JSON.parse(compressed);
+    document.getElementById("last_player").innerHTML="LastPlayer:"+onTheBoard.person+" Score:"+onTheBoard.score;
+ }
+
 Physics(function(world){
   var viewWidth = 900;
   var viewHeight = 500;
@@ -31,7 +43,7 @@ Physics(function(world){
     height:10,
     treatment: 'static'
   });
-
+   
   //city builder function DOES NOT WORK
   // function cityBuilder(name,location) {
       
@@ -157,7 +169,7 @@ Physics(function(world){
   // start the ticker
   Physics.util.ticker.start();
 
-  //enemy generator
+  //enemy generator and game over controls
   var factory=window.setInterval( function(){
       enemy = Physics.body('convex-polygon', {
         x: Math.floor(Math.random() * (880 - 20)) + 20, //randomly generated enemy on x axis
@@ -174,7 +186,7 @@ Physics(function(world){
       world.add(enemy);
     }
     else {
-      alert("Game Over");  //no more targets, no more enemy generation
+      endOfGame(); //no more targets, no more enemy generation
       clearInterval(factory);
     }
   },2000);
@@ -185,7 +197,7 @@ Physics(function(world){
       document.getElementById('score').innerHTML="Score: " + currentScore;
   }
   
-  //deletion function
+  //deletion function for collision detection
   function deletion(itemA,itemB){
     world.remove(itemA);
     world.remove(itemB);
@@ -211,6 +223,16 @@ Physics(function(world){
     bullet.sleep(false);
   });
   
+  //recent score in local storage would like to add a scoring table later  
+  function endOfGame(){
+    var who=prompt("What is your name: ");
+    var what=currentScore;
+    endPlayer=new Player(who,what);
+    savedPlayer=JSON.stringify(endPlayer);
+    localStorage.setItem("lastPlayer",savedPlayer);
+  }
+
+
   //collision queries DO NOT WORK
   //if bullet hits city
   // var bulletHitCity=Physics.query({
