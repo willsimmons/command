@@ -233,11 +233,14 @@ Physics(function(world){
   }
 
   //collision queries DO NOT WORK
-  //if bullet hits city
-  // var bulletHitCity=Physics.query({
-  //   labels:{$in:['circle', 'rectangle']}
-  // });
-  
+  var bulletHit = Physics.query({
+    name: 'circle', // only circles,aka bullets
+    });
+
+  var enemyHit = Physics.query({
+    name: 'convex-polygon', // only circles,aka bullets
+    });
+
   // //if bullet hits enemy
   // var bulletHitEnemy=Physics.query({
   //   labels:{$in:['circle', 'convex-polygon']}
