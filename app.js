@@ -37,7 +37,8 @@ Physics(function(world){
     y: 480,
     width: 50,
     height: 30,
-    treatment: 'static'
+    treatment: 'static',
+    labels: 'turret'
   });
   
   var cannon = Physics.body('rectangle', {
@@ -45,7 +46,8 @@ Physics(function(world){
     y: 440,
     width:25,
     height:10,
-    treatment: 'static'
+    treatment: 'static',
+    labels:'turret'
   });
 
   // //city builder function works(would remove 66 to 96) to add cities but ruins hit detection
@@ -56,7 +58,8 @@ Physics(function(world){
   //     y: 475,
   //     width:80,
   //     height:40,
-  //     treatment: 'static'
+  //     treatment: 'static',
+  //     label:'city'
   //     });
   // }
 
@@ -72,7 +75,8 @@ Physics(function(world){
     y: 475,
     width:80,
     height:40,
-    treatment: 'static'
+    treatment: 'static',
+    labels:'city'
   });
   
   var cityB = Physics.body('rectangle', {
@@ -80,7 +84,8 @@ Physics(function(world){
     y: 475,
     width: 80,
     height:40,
-    treatment: 'static'
+    treatment: 'static',
+    labels:'city'
   });
   
   var cityC = Physics.body('rectangle', {
@@ -88,7 +93,8 @@ Physics(function(world){
     y: 475,
     width:80,
     height:40,
-    treatment: 'static'
+    treatment: 'static',
+    labels:'city'
   });
   
   var cityD = Physics.body('rectangle', {
@@ -96,7 +102,8 @@ Physics(function(world){
     y: 475,
     width:80,
     height:40,
-    treatment: 'static'
+    treatment: 'static',
+    labels:'city'
   });
 
   //renderer
@@ -112,9 +119,12 @@ Physics(function(world){
         'circle' : {     //bullets
           fillStyle: '#F70A0A'
         },
-        'rectangle' : {     //cities and turret
+        'city' : {     //cities 
           fillStyle: '#0000FF'
-        }
+        },
+        'turret': {  //why is this not working for the turret, don't understand
+          fillStyle: '#E9F022'
+        },
       }
     });
 
@@ -178,6 +188,7 @@ Physics(function(world){
     enemy = Physics.body('convex-polygon', {
         x: Math.floor(Math.random() * (880 - 20)) + 20, //randomly generated enemy on x axis
         y: 100,
+        labels:'enemy',
         vertices: [
         { x: 0, y: -15 },
         { x: -15, y: -4 },
@@ -221,7 +232,8 @@ Physics(function(world){
       radius: 10,
       treatment:'dynamic',    
       vx: cos, //cosine for x coordinate acceleration
-      vy: sin//sine for y coordinate acceleration
+      vy: sin,//sine for y coordinate acceleration
+      labels:'bullet'
     });
    world.add(bullet);   
    bullet.sleep(false);
@@ -249,15 +261,18 @@ Physics(function(world){
   //   labels:{$in:['circle', 'convex-polygon']}
   // });
 
-  // //if enemy hits city
+  //if enemy hits city
   // var enemyHitCity=Physics.query({
-  //   labels:{$in:['convex-polygon', 'rectangle']}
+  //   labels:{$in:['enemy', 'city']}
   // });
 
   //collision handling for cities, bullets, and enemies "the mess"
   world.on('collisions:detected', function(data, event) { 
-
-  // no bullets hitting cities
+       // if((enemyHitCity(data.collisions.bodyA))&&(enemyHitCity(datacollisions.bodyB))){
+       //    deletion(data.collisions.bodyA,data.collisions.bodyB);
+       //    cityCount--; TEST OF QUERY, NOT WORKING
+       // }
+  //no bullets hitting cities
   if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===cityA) ||
   (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===cityA)){
     deletion(bullet);
