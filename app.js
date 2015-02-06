@@ -9,7 +9,7 @@ function Player(person,score){
  if(localStorage.getItem("lastPlayer")!==null){
     var compressed=localStorage.getItem("lastPlayer");
     var onTheBoard=JSON.parse(compressed);
-    document.getElementById("last_player").innerHTML="LastPlayer:"+onTheBoard.person+" Score:"+onTheBoard.score;
+    document.getElementById("last_player").innerHTML="Last Player:"+onTheBoard.person+" <br>Score:"+onTheBoard.score;
  }
 
 Physics(function(world){
@@ -225,7 +225,7 @@ Physics(function(world){
   
   //recent score in local storage would like to add a scoring table later  
   function endOfGame(){
-    var who=prompt("What is your name: ");
+    var who=prompt("Game Over! What is your name: ");
     var what=currentScore;
     endPlayer=new Player(who,what);
     savedPlayer=JSON.stringify(endPlayer);
