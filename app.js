@@ -5,20 +5,21 @@ function Player(person,score){
   this.person=person;
   this.score=score;
 }
+
 //show us the last player...if they exist
- if(localStorage.getItem("lastPlayer")!==null){
-    var compressed=localStorage.getItem("lastPlayer");
-    var onTheBoard=JSON.parse(compressed);
+if(localStorage.getItem("lastPlayer")!==null){
+  var compressed=localStorage.getItem("lastPlayer");
+  var onTheBoard=JSON.parse(compressed);
     if(onTheBoard.person!=='null') //if they don't put in a name, no score keeping for them
     {
       $("#last_player").html("Last Player:"+onTheBoard.person+"<br>Last Score:"+onTheBoard.score);
     }
- }
+}
 
 Physics(function(world){
   var viewWidth = 900;
   var viewHeight = 500;
-   
+
   //variables used in functions below
   var scratch; //will be used for mouse movement tracking
   var newAngle; //the point that we are aiming at
@@ -46,10 +47,10 @@ Physics(function(world){
     height:10,
     treatment: 'static'
   });
-   
+
   // //city builder function works(would remove 66 to 96) to add cities but ruins hit detection
   // function cityBuilder(name,location) {
-      
+
   //     var place = Physics.body('rectangle',{
   //     x: location,
   //     y: 475,
@@ -114,8 +115,8 @@ Physics(function(world){
         'rectangle' : {     //cities and turret
           fillStyle: '#0000FF'
         }
-    }
-  });
+      }
+    });
 
   // add the renderer
   world.add( renderer );
@@ -145,13 +146,13 @@ Physics(function(world){
   // modified, 75% gravity from physics default, game was too hard otherwise 
   var halfGravity = Physics.behavior('constant-acceleration', {
     acc: { x : 0, y: 0.0003 } // reduced from default of .0004
-    });
+  });
 
   world.add(halfGravity);
 
   // subscribe to ticker to advance the simulation
   Physics.util.ticker.on(function( time, dt ){
-      world.step( time );
+    world.step( time );
   });
 
   //targeting functionality for mouse movement
@@ -162,29 +163,29 @@ Physics(function(world){
     mousePos.vsub(cannon.state.pos); //calulate the diff
     newAngle = mousePos.angle(); // get new angle with respect to x axis
     cannon.state.angular.pos = newAngle; //set to new angle
-    });
+  });
 
   //listener to fire bullet on click
   $('#board').click(function(event) {
     world.emit('shot-fired');
-    });
+  });
 
   // start the ticker
   Physics.util.ticker.start();
 
   //enemy generator and game over controls
   var factory=window.setInterval( function(){
-      enemy = Physics.body('convex-polygon', {
+    enemy = Physics.body('convex-polygon', {
         x: Math.floor(Math.random() * (880 - 20)) + 20, //randomly generated enemy on x axis
         y: 100,
         vertices: [
-            { x: 0, y: -15 },
-            { x: -15, y: -4 },
-            { x: -9, y: 12 },
-            { x: 9, y: 12 },
-            { x: 15, y: -4 }
-            ] 
-        });
+        { x: 0, y: -15 },
+        { x: -15, y: -4 },
+        { x: -9, y: 12 },
+        { x: 9, y: 12 },
+        { x: 15, y: -4 }
+        ] 
+      });
     if(cityCount!==0){
       world.add(enemy);
     }
@@ -198,8 +199,8 @@ Physics(function(world){
   function scoring(){
       currentScore+=25; //increases score by 100 per enemy kill, but, that's because of the ifstatement problem
       $("#score").innerHTML="Score: " + currentScore;
-  }
-  
+    }
+
   //deletion function for collision detection
   function deletion(itemA,itemB){
     world.remove(itemA);
@@ -221,10 +222,10 @@ Physics(function(world){
       treatment:'dynamic',    
       vx: cos, //cosine for x coordinate acceleration
       vy: sin//sine for y coordinate acceleration
-      });
-    world.add(bullet);   
-    bullet.sleep(false);
-  });
+    });
+   world.add(bullet);   
+   bullet.sleep(false);
+ });
   
   //recent score in local storage would like to add a scoring table later  
   function endOfGame(){
@@ -252,81 +253,80 @@ Physics(function(world){
   // var enemyHitCity=Physics.query({
   //   labels:{$in:['convex-polygon', 'rectangle']}
   // });
-  
+
   //collision handling for cities, bullets, and enemies "the mess"
   world.on('collisions:detected', function(data, event) { 
 
-   // no bullets hitting cities
-    if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===cityA) ||
-        (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===cityA)){
-        deletion(bullet);
-    }
-    if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===cityB) || 
-        (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===cityB)){
-        deletion(bullet);
-    }
-    if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===cityC) || 
-        (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===cityC)){
-        deletion(bullet);
-    }
-    if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===cityD) || 
-        (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===cityD)){
-        deletion(bullet);
-    }   
+  // no bullets hitting cities
+  if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===cityA) ||
+  (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===cityA)){
+    deletion(bullet);
+  }
+  if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===cityB) || 
+  (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===cityB)){
+    deletion(bullet);
+  }
+  if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===cityC) || 
+  (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===cityC)){
+    deletion(bullet);
+  }
+  if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===cityD) || 
+  (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===cityD)){
+    deletion(bullet);
+  }   
     //bullets killing enemies
-    if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) ||
-        (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
-        deletion(bullet,enemy);
-        scoring(currentScore);
-    }
-    if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) || 
-        (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
-        deletion(bullet,enemy);
-        scoring(currentScore);
-    }
-    if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) || 
-        (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
-        deletion(bullet,enemy);
-        scoring(currentScore);
-    }
-    if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) || 
-        (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
-        deletion(bullet,enemy);
-        scoring(currentScore);
-    }  
-
-    // enemy hitting a city
-    if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cityA) ||
-        (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cityA)){
-        deletion(enemy,cityA);
-        cityCount--;
-    }
-    if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cityB) || 
-        (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cityB)){
-        deletion(enemy,cityB);
-        cityCount--;
-    }
-    if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cityC) || 
-        (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cityC)){
-        deletion(enemy,cityC);
-        cityCount--;
-    }
-    if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cityD) || 
-        (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cityD)){
-        deletion(enemy,cityD);
-        cityCount--;
-    }
-        //strange events aka, enemy hitting turret 
-     if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cannon) || 
-        (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cannon)){
-        deletion(enemy);
-    }
-
-     if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===turretBase) || 
-        (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===turretBase)){
-        deletion(enemy);
-    }    
+  if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) ||
+  (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
+      deletion(bullet,enemy);
+      scoring(currentScore);
+  }
+  if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) || 
+  (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
+    deletion(bullet,enemy);
+    scoring(currentScore);
+  }
+  if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) || 
+  (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
+    deletion(bullet,enemy);
+    scoring(currentScore);
+  }
+  if ((bullet === data.collisions[0].bodyA && data.collisions[0].bodyB===enemy) || 
+  (bullet === data.collisions[0].bodyB && data.collisions[0].bodyA===enemy)){
+    deletion(bullet,enemy);
+    scoring(currentScore);
+  }  
+  // enemy hitting a city
+  if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cityA) ||
+  (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cityA)){
+    deletion(enemy,cityA);
+    cityCount--;
+  }
+  if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cityB) || 
+  (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cityB)){
+    deletion(enemy,cityB);
+    cityCount--; 
+  }
+  if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cityC) || 
+  (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cityC)){
+    deletion(enemy,cityC);
+    cityCount--;
+  }
+  if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cityD) || 
+  (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cityD)){
+    deletion(enemy,cityD);
+    cityCount--;
+  }
+  //strange events aka, enemy hitting turret 
+  if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===cannon) || 
+  (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===cannon)){
+    deletion(enemy);
+  }
+  if ((enemy === data.collisions[0].bodyA && data.collisions[0].bodyB===turretBase) || 
+  (enemy === data.collisions[0].bodyB && data.collisions[0].bodyA===turretBase)){
+    deletion(enemy);
+  }    
   });
 
- });
-});
+});  //close physics
+
+});  //close doc ready load

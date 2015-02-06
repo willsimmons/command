@@ -1,4 +1,3 @@
-Goal List
 - Use query instead of if statements for collision detection
 - use citybuilder function 
 - Increasing Difficulty after certain time period (faster gravity, adjust frequency of enemy generator)
