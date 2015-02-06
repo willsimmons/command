@@ -9,7 +9,7 @@ function Player(person,score){
  if(localStorage.getItem("lastPlayer")!==null){
     var compressed=localStorage.getItem("lastPlayer");
     var onTheBoard=JSON.parse(compressed);
-    document.getElementById("last_player").innerHTML="Last Player:"+onTheBoard.person+" <br>Score:"+onTheBoard.score;
+    document.getElementById("last_player").innerHTML="Last Player:"+onTheBoard.person+"<br>Last Score:"+onTheBoard.score;
  }
 
 Physics(function(world){
@@ -44,7 +44,7 @@ Physics(function(world){
     treatment: 'static'
   });
    
-  //city builder function DOES NOT WORK
+  // //city builder function works(would remove 66 to 96) to add cities but ruins hit detection
   // function cityBuilder(name,location) {
       
   //     var place = Physics.body('rectangle',{
@@ -56,10 +56,10 @@ Physics(function(world){
   //     });
   // }
 
-  // cityA=cityBuilder(cityA,100);
-  // cityB=cityBuilder(cityB,265);
-  // cityC=cityBuilder(cityC,635);
-  // cityD=cityBuilder(cityD,800);
+  // cityBuilder("cityA",100);
+  // cityBuilder("cityB",265);
+  // cityBuilder("cityC",635);
+  // cityBuilder("cityD",800);
   
   //four cities to defend
 
@@ -186,15 +186,15 @@ Physics(function(world){
       world.add(enemy);
     }
     else {
-      endOfGame(); //no more targets, no more enemy generation
+      endOfGame(); //no more targets, no more enemy generation, lets add player object to local storage
       clearInterval(factory);
     }
   },2000);
   
   //scorekeeping function
   function scoring(){
-      currentScore+=25; //increases score by 100 per enemy kill, needs to fix city issue
-      document.getElementById('score').innerHTML="Score: " + currentScore;
+      currentScore+=25; //increases score by 100 per enemy kill, but, that's because of the ifstatement problem
+      document.getElementById("score").innerHTML="Score: " + currentScore;
   }
   
   //deletion function for collision detection
@@ -231,7 +231,6 @@ Physics(function(world){
     savedPlayer=JSON.stringify(endPlayer);
     localStorage.setItem("lastPlayer",savedPlayer);
   }
-
 
   //collision queries DO NOT WORK
   //if bullet hits city

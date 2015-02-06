@@ -1,12 +1,21 @@
 #board {
   margin: auto;
+  margin-top: 0px;
   height:500px;
   width:900px;
-  border:4px white;
+  border:1px solid white;
   background: black;
 }
 
 h1,p{
 	font-family: 'Jockey One', sans-serif;
 	text-align: center;
+  color: white;
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+
+body {
+    background-image: url("background.png");
+    background-color: #cccccc;
 }

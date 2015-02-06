@@ -1,18 +1,15 @@
-To-Do
-1.Use query instead of if statements at collision detection
-2.Use city generator
-3.Deploy
-
-WishList (after deployment)
-1. Increasing Difficulty after certain time period (faster gravity, adjust frequency of enemy generator)
-2. High Score Table
-3. Extra Life Component
-4. Start Screen w/ High Score Tableview
-5. Explosions on City Death
-6. More Cities
-7. Lables on Cities
-8. Instructions Page
-9. Smart Targeting by enemy 
-10. Slow Exploding Bullets
-11. Enemy "Trails"
-12. Look like an old ATARI Cabinet
+Goal List
+- Use query instead of if statemens for collision detection
+- use citybuilder function 
+- Increasing Difficulty after certain time period (faster gravity, adjust frequency of enemy generator)
+- High Score Table
+- Extra Life Component
+- Start Screen w/ High Score Tableview
+- Explosions on City Death
+- More Cities
+- Lables on Cities
+- Instructions Page
+- Smart Targeting by enemy 
+- Slow Exploding Bullets
+- Enemy "Trails"
+- Look like an old ATARI Cabinet
