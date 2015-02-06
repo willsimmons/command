@@ -9,7 +9,10 @@ function Player(person,score){
  if(localStorage.getItem("lastPlayer")!==null){
     var compressed=localStorage.getItem("lastPlayer");
     var onTheBoard=JSON.parse(compressed);
-    $("#last_player").html("Last Player:"+onTheBoard.person+"<br>Last Score:"+onTheBoard.score);
+    if(onTheBoard.person!=='null') //if they don't put in a name, no score keeping for them
+    {
+      $("#last_player").html("Last Player:"+onTheBoard.person+"<br>Last Score:"+onTheBoard.score);
+    }
  }
 
 Physics(function(world){
@@ -233,14 +236,13 @@ Physics(function(world){
   }
 
   //collision queries DO NOT WORK
-  var bulletHit = Physics.query({
-    name: 'circle', // only circles,aka bullets
-    });
+  // var bulletHit = Physics.query({
+  //   name: 'circle', // only circles,aka bullets
+  //   });
 
-  var enemyHit = Physics.query({
-    name: 'convex-polygon', // only circles,aka bullets
-    });
-
+  // var enemyHit = Physics.query({
+  //   name: 'convex-polygon', // only circles,aka bullets
+  //   });
   // //if bullet hits enemy
   // var bulletHitEnemy=Physics.query({
   //   labels:{$in:['circle', 'convex-polygon']}
