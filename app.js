@@ -59,7 +59,7 @@ Physics(function(world){
   //     width:80,
   //     height:40,
   //     treatment: 'static',
-  //     label:'city'
+  //     labels:'city'
   //     });
   // }
 
@@ -122,7 +122,7 @@ Physics(function(world){
         'city' : {     //cities 
           fillStyle: '#0000FF'
         },
-        'turret': {  //why is this not working for the turret, don't understand
+        'turret' : {  //why is this not working for the turret, don't understand
           fillStyle: '#E9F022'
         },
       }
