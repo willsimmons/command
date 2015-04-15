@@ -166,7 +166,7 @@ Physics(function(world){
   });
 
   //targeting functionality for mouse movement
-  $("#board").mousemove(function(event){
+  $("body").mousemove(function(event){
     scratch = Physics.scratchpad();  //have to use this or it "blows up"
     mousePos = scratch.vector().set(event.pageX, event.pageY); //where are we pointing now
     scratch.done(); //throw out the scratchpaper
